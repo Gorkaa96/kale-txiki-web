@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
+import "./kale-v2.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://kale-txiki-web.vercel.app"),
@@ -10,9 +11,9 @@ export const metadata: Metadata = {
   },
   description: "Menú del día, menú de fin de semana, pintxos, vermuts, raciones, pizzas y hamburguesas caseras en Lakuntza.",
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
   openGraph: {
     title: "Kale Txiki Taberna | Restaurante en Lakuntza",

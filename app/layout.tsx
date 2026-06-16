@@ -6,18 +6,18 @@ import "./kale-v2.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://kale-txiki-web.vercel.app"),
   title: {
-    default: "Kale Txiki Taberna | Restaurante en Lakuntza",
+    default: "Kale Txiki Taberna | Bar y restaurante en Lakuntza",
     template: "%s | Kale Txiki Taberna",
   },
-  description: "Menú del día, menú de fin de semana, pintxos, vermuts, raciones, pizzas y hamburguesas caseras en Lakuntza.",
+  description: "Bar y restaurante en Lakuntza para menú diario, fin de semana, pintxos, vermut, raciones, pizzas y hamburguesas.",
   icons: {
     icon: "/icon.png",
     shortcut: "/icon.png",
     apple: "/icon.png",
   },
   openGraph: {
-    title: "Kale Txiki Taberna | Restaurante en Lakuntza",
-    description: "Taberna restaurante en Lakuntza con menú, barra, vermut, raciones, pizzas y hamburguesas caseras.",
+    title: "Kale Txiki Taberna | Bar y restaurante en Lakuntza",
+    description: "Menú diario, barra, vermut, raciones, pizzas y hamburguesas en un local moderno y cercano en Lakuntza.",
     type: "website",
     locale: "es_ES",
   },

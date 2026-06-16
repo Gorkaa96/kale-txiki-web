@@ -12,7 +12,7 @@ export default function Home() {
     <main className="site">
       <header className="header">
         <a href="#inicio" className="logo" aria-label="Kale Txiki Taberna">
-          <img src="/logo.svg" alt="Kale Txiki" />
+          <img src="/logo.png" alt="Kale Txiki" />
         </a>
         <nav className="nav" aria-label="Navegación principal">
           <a href="#menu">Menús</a>
@@ -24,15 +24,11 @@ export default function Home() {
       </header>
 
       <section className="hero" id="inicio">
-        <div className="heroMedia" aria-label="Interior de Kale Txiki Taberna">
-          <span className="ceiling" />
-          <span className="counter" />
-          <span className="tables" />
-        </div>
+        <div className="heroMedia" aria-label="Interior de Kale Txiki Taberna" />
         <div className="heroContent">
           <p className="kicker">Lakuntza · Taberna restaurante</p>
-          <h1>Comer, cenar y juntarse alrededor de una buena mesa.</h1>
-          <p className="heroLead">Menú entre semana, menú de fin de semana, pintxos, vermuts, raciones, pizzas y hamburguesas caseras en un local actual, cálido y cómodo.</p>
+          <h1>Menús, barra y cenas en un local actual.</h1>
+          <p className="heroLead">Kale Txiki es un punto de encuentro en Lakuntza para comer entre semana, disfrutar el fin de semana, tomar un vermut o cenar con los tuyos.</p>
           <div className="heroActions">
             <a className="btn btnPrimary" href={site.phoneHref}>Reservar por teléfono</a>
             <a className="btn btnSecondary" href="#menu">Ver menús y carta</a>
@@ -70,11 +66,11 @@ export default function Home() {
       </section>
 
       <section className="local" id="local">
-        <div className="localImage"><span /><span /></div>
+        <div className="localImage" />
         <div className="localCopy">
           <p className="kicker">El local</p>
-          <h2>Madera, barra negra, tonos piedra y luz cálida.</h2>
-          <p>El local combina una estética limpia y moderna con el ambiente cercano de una taberna de pueblo. Un espacio cómodo para comer al mediodía, tomar un vermut o alargar la tarde con una cena informal.</p>
+          <h2>Madera clara, barra negra, tonos piedra y luz cálida.</h2>
+          <p>Un espacio moderno y cómodo para comer al mediodía, tomar un vermut o alargar la tarde con una cena informal.</p>
         </div>
       </section>
 
@@ -82,7 +78,7 @@ export default function Home() {
         <div className="galleryHead">
           <p className="kicker">Ambiente</p>
           <h2>Un interior actual, reconocible y con carácter propio.</h2>
-          <p>La dirección visual se inspira en las imágenes reales del local: madera clara, barra oscura, tonos piedra e iluminación cálida.</p>
+          <p>La estética se apoya en el propio local: madera clara, barra oscura, tonos piedra e iluminación cálida.</p>
         </div>
         <div className="galleryGrid">
           <div aria-label="Barra de Kale Txiki" />
@@ -98,7 +94,7 @@ export default function Home() {
           <p>Para menús, cenas y fines de semana, llama al local y confirma disponibilidad.</p>
         </div>
         <aside className="reserveCard">
-          <img src="/logo.svg" alt="Kale Txiki" />
+          <img src="/logo.png" alt="Kale Txiki" />
           <a className="phone" href={site.phoneHref}>{site.phone}</a>
           <span>{site.address}</span>
           <a className="btn btnLight" href={site.phoneHref}>Llamar ahora</a>
@@ -106,7 +102,7 @@ export default function Home() {
       </section>
 
       <footer className="footer">
-        <div><img src="/logo.svg" alt="Kale Txiki" /><p>{site.tagline}</p></div>
+        <div><img src="/logo.png" alt="Kale Txiki" /><p>{site.tagline}</p></div>
         <div><strong>Contacto</strong><a href={site.phoneHref}>{site.phone}</a><span>{site.address}</span></div>
         <div><strong>Web</strong><a href="/menu">Menú</a><a href="/reservas">Reservas</a><a href="/contacto">Contacto</a></div>
         <div><strong>Legal</strong><a href="/aviso-legal">Aviso legal</a><a href="/politica-privacidad">Privacidad</a><a href="/politica-cookies">Cookies</a></div>

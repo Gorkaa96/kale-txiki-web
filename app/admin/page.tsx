@@ -7,7 +7,7 @@ import styles from "./admin.module.css";
 
 export const dynamic = "force-dynamic";
 
-type Menu = { id: string; menu_type: "daily" | "weekend"; title: string; menu_date: string | null; period_label: string | null; status: string };
+type Menu = { id: string; menu_type: "daily" | "weekend"; title: string; menu_date: string | null; period_label: string | null; first_courses: string | null; second_courses: string | null; desserts: string | null; notes: string | null; price: string | null; status: string };
 
 async function getMenus(code: string): Promise<Menu[]> {
   if (!code) return [];
@@ -25,7 +25,7 @@ async function getMenus(code: string): Promise<Menu[]> {
   return response.json();
 }
 
-export default async function Page({ searchParams }: { searchParams?: { ok?: string; error?: string; login_error?: string } }) {
+export default async function Page({ searchParams }: { searchParams?: { ok?: string; error?: string; login_error?: string; edit?: string } }) {
   const cookieStore = await cookies();
   const code = cookieStore.get("kale_admin_code")?.value || "";
 
@@ -34,6 +34,7 @@ export default async function Page({ searchParams }: { searchParams?: { ok?: str
   }
 
   const menus = await getMenus(code);
+  const selectedMenu = searchParams?.edit ? menus.find((menu) => menu.id === searchParams.edit) : undefined;
 
-  return <main className={styles.page}><div className={styles.wrap}><header className={styles.top}><div className={`${styles.brand} ${styles.brandSmall}`}><img src="/logo.png" alt="Kale Txiki" /><div><div className={styles.kicker}>Kale Txiki Taberna</div><h1 className={styles.title}>Panel de menús</h1><p className={styles.darkText}>Prepara menús por fecha, guárdalos como borrador y publica cuando quieras.</p></div></div><nav className={styles.navLinks}><a className={`${styles.button} ${styles.buttonLight}`} href="/menu">Ver menú público</a><a className={`${styles.button} ${styles.buttonLight}`} href="/">Volver a la web</a></nav></header><section className={styles.grid}><MenuEditor code={code} ok={searchParams?.ok === "1"} error={searchParams?.error === "1"} /><MenuList code={code} menus={menus} /></section></div></main>;
+  return <main className={styles.page}><div className={styles.wrap}><header className={styles.top}><div className={`${styles.brand} ${styles.brandSmall}`}><img src="/logo.png" alt="Kale Txiki" /><div><div className={styles.kicker}>Kale Txiki Taberna</div><h1 className={styles.title}>Panel de menús</h1><p className={styles.darkText}>Prepara menús por fecha, guárdalos como borrador y publica cuando quieras.</p></div></div><nav className={styles.navLinks}><a className={`${styles.button} ${styles.buttonLight}`} href="/menu">Ver menú público</a><a className={`${styles.button} ${styles.buttonLight}`} href="/">Volver a la web</a></nav></header><section className={styles.grid}><MenuEditor code={code} menu={selectedMenu} ok={searchParams?.ok === "1"} error={searchParams?.error === "1"} /><MenuList code={code} menus={menus} /></section></div></main>;
 }

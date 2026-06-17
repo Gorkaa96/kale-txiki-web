@@ -1,5 +1,5 @@
-import HomeContentV6 from "./home-content-v6";
+import HomePage from "./home-page";
 
 export default function Home() {
-  return <HomeContentV6 />;
+  return <HomePage />;
 }

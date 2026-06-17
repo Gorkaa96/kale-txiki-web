@@ -1,0 +1,5 @@
+import styles from "./admin.module.css";
+
+export default function AdminLogin({ loginError }: { loginError?: boolean }) {
+  return <main className={styles.page}><section className={`${styles.card} ${styles.loginShell}`}><div className={styles.brand}><img src="/logo.png" alt="Kale Txiki" /><div><div className={styles.kicker}>Panel interno</div><h1 className={styles.title}>Acceso</h1></div></div><p className={styles.subtitle}>Introduce el código privado para gestionar los menús de Kale Txiki.</p>{loginError ? <div className={styles.alertError}>Código incorrecto. Revisa el código admin.</div> : null}<form action="/api/admin/session" method="post" className={styles.form}><div className={styles.field}><label>Código</label><input className={styles.input} name="code" required /></div><div className={styles.actions}><button className={styles.button} type="submit">Entrar</button><a className={`${styles.button} ${styles.buttonSecondary}`} href="/">Volver a la web</a></div></form></section></main>;
+}

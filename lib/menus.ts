@@ -12,8 +12,8 @@ export type PublishedMenu = {
   published_at: string | null;
 };
 
-const SUPABASE_URL = "https://vprczjegprkwzashxyul.supabase.co";
-const SUPABASE_KEY = "sb_publishable_UUmTRnFTUlB1bO8klaWKSA_fyOoFcQX";
+const SUPABASE_URL = "https://lbhyormtuaevhkybezfo.supabase.co";
+const SUPABASE_KEY = "sb_publishable_YwiaGnWHSnwpUL7GS-VWMw_Gl93N0Zw";
 
 export async function getPublishedMenus(): Promise<PublishedMenu[]> {
   const params = new URLSearchParams({

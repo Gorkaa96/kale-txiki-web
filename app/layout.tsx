@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 import "./kale-v2.css";
+import "./kale-polish.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://kale-txiki-web.vercel.app"),
@@ -18,15 +19,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kale Txiki Taberna | Bar y restaurante en Lakuntza",
     description: "Menú diario, barra, vermut, raciones, pizzas y hamburguesas en un local moderno y cercano en Lakuntza.",
-    type: "website",
+    url: "https://kale-txiki-web.vercel.app",
+    siteName: "Kale Txiki Taberna",
+    images: [{ url: "/assets/hero-local.webp", width: 1200, height: 630, alt: "Kale Txiki Taberna" }],
     locale: "es_ES",
+    type: "website",
   },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang="es">
-      <body>{children}</body>
-    </html>
-  );
+  return <html lang="es"><body>{children}</body></html>;
 }

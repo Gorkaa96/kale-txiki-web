@@ -27,5 +27,5 @@ export async function POST(request: Request) {
   });
 
   const target = response.ok ? "/admin?ok=1" : "/admin?error=1";
-  return NextResponse.redirect(new URL(target, request.url));
+  return NextResponse.redirect(new URL(target, request.url), { status: 303 });
 }

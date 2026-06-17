@@ -1,5 +1,5 @@
-import HomeContentV2 from "./home-content-v2";
+import HomeContentV3 from "./home-content-v3";
 
 export default function Home() {
-  return <HomeContentV2 />;
+  return <HomeContentV3 />;
 }

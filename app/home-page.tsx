@@ -1,6 +1,6 @@
 import BusinessJsonLd from "./business-json-ld";
-import HomeContentV6 from "./home-content-v6";
+import HomeContentV7 from "./home-content-v7";
 
 export default function HomePage() {
-  return <><BusinessJsonLd /><HomeContentV6 /></>;
+  return <><BusinessJsonLd /><HomeContentV7 /></>;
 }

@@ -1,9 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { kaleSupabase } from "../../../../../lib/kale-supabase";
 
-export async function POST(request: Request) {
+function cleanDate(value: FormDataEntryValue | null) {
+  const text = String(value || "");
+  return text ? text : null;
+}
+
+export async function POST(request: NextRequest) {
   const form = await request.formData();
-  const code = String(form.get("code") || "");
+  const code = request.cookies.get("kale_admin_code")?.value || String(form.get("code") || "");
   const status = String(form.get("status") || "draft");
 
   const response = await fetch(`${kaleSupabase.url}/rest/v1/rpc/insert_menu_with_code`, {
@@ -23,6 +28,8 @@ export async function POST(request: Request) {
       input_notes: String(form.get("notes") || ""),
       input_price: String(form.get("price") || ""),
       input_status: status,
+      input_menu_date: cleanDate(form.get("menu_date")),
+      input_period_label: String(form.get("period_label") || ""),
     }),
   });
 

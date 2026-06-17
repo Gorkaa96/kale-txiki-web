@@ -1,1 +1,1 @@
-export { default } from "./admin-client-v2";
+export { default } from "./admin-form";

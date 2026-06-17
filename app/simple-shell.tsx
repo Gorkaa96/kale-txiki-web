@@ -1,0 +1,12 @@
+import { ReactNode } from "react";
+import { site } from "../lib/site";
+
+const shellCss = `.simplePage{background:#e7e1d8!important;color:#171615!important}.simplePage:before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 12% 15%,rgba(196,154,103,.22),transparent 28%),radial-gradient(circle at 90% 10%,rgba(0,0,0,.08),transparent 24%)}.simpleLogo{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:138px!important;height:70px!important;margin-bottom:44px!important;overflow:hidden!important}.simpleLogo img{width:auto!important;height:auto!important;max-width:130px!important;max-height:60px!important;object-fit:contain!important}.simplePage section{max-width:920px!important}.simplePage h1{max-width:900px!important}.simplePage p{max-width:780px!important}.simpleBox{display:grid!important;gap:14px!important;margin-top:28px!important;max-width:520px!important}.simpleBox strong{font-family:Georgia,serif!important;font-size:34px!important;line-height:1!important}.interiorBack{display:inline-flex;margin-top:26px;color:#706960;font-weight:850}.interiorHero{margin-top:34px;min-height:280px;border-radius:32px;background-image:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.26)),url('/assets/bar-wide.webp');background-size:cover;background-position:center;box-shadow:0 26px 80px rgba(15,15,14,.16)}@media(max-width:640px){.simplePage{padding:92px 20px!important}.simpleLogo{width:110px!important;height:58px!important}.simpleLogo img{max-width:106px!important;max-height:48px!important}.simpleBox strong{font-size:28px!important}}`;
+
+export default function SimpleShell({ kicker, title, children, image = false }: { kicker: string; title: string; children: ReactNode; image?: boolean }) {
+  return <main className="simplePage"><style>{shellCss}</style><a href="/" className="simpleLogo"><img src="/logo.png" alt="Kale Txiki" /></a><section><p className="kicker">{kicker}</p><h1>{title}</h1>{children}<a className="interiorBack" href="/">Volver al inicio</a>{image ? <div className="interiorHero" aria-label="Interior de Kale Txiki" /> : null}</section></main>;
+}
+
+export function ContactBox() {
+  return <div className="simpleBox"><strong>{site.phone}</strong><span>{site.address}</span><a className="btn btnPrimary" href={site.phoneHref}>Llamar ahora</a></div>;
+}

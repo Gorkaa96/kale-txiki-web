@@ -5,11 +5,19 @@ import styles from "./menu.module.css";
 
 function formatDate(value: string | null) {
   if (!value) return null;
-  return new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "2-digit", month: "long" }).format(new Date(value));
+  return new Intl.DateTimeFormat("es-ES", {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+  }).format(new Date(value));
 }
 
 function todayKey() {
-  return new Date().toISOString().slice(0, 10);
+  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Madrid" }).format(new Date());
+}
+
+function typeLabel(value: PublishedMenu["menu_type"]) {
+  return value === "weekend" ? "Fin de semana" : "Menú diario";
 }
 
 function pickCurrentMenu(menus: PublishedMenu[], type: PublishedMenu["menu_type"]) {
@@ -22,15 +30,33 @@ function pickCurrentMenu(menus: PublishedMenu[], type: PublishedMenu["menu_type"
   return upcoming[0] || items[0];
 }
 
+function DishSection({ title, items }: { title: string; items: string[] }) {
+  if (!items.length) return null;
+  return <section className={styles.section}><h3>{title}</h3><ul>{items.map((item, index) => <li key={`${title}-${index}-${item}`}>{item}</li>)}</ul></section>;
+}
+
+function MenuCard({ menu }: { menu: PublishedMenu }) {
+  const firstCourses = lines(menu.first_courses);
+  const secondCourses = lines(menu.second_courses);
+  const desserts = lines(menu.desserts);
+  const date = menu.period_label || formatDate(menu.menu_date) || typeLabel(menu.menu_type);
+
+  return <article className={styles.menuCard}><div className={styles.menuCardTop}><div><span className={styles.eyebrow}>{typeLabel(menu.menu_type)}</span><h2>{menu.title}</h2><p className={styles.meta}>{date}</p></div></div><div className={styles.divider} /><DishSection title="Primeros / propuesta" items={firstCourses} /><DishSection title="Segundos" items={secondCourses} /><DishSection title="Postres" items={desserts} />{menu.price ? <div className={styles.price}><span>Precio</span><strong>{menu.price}</strong></div> : null}{menu.notes ? <p className={styles.notes}>{menu.notes}</p> : null}</article>;
+}
+
 export default async function MenuDataView() {
   const published = await getPublishedMenus();
-  const latest = [pickCurrentMenu(published, "daily"), pickCurrentMenu(published, "weekend")].filter(Boolean);
+  const latest = [pickCurrentMenu(published, "daily"), pickCurrentMenu(published, "weekend")].filter(Boolean) as PublishedMenu[];
 
-  return <SimpleShell kicker="Menús y carta" title="Menús publicados de Kale Txiki." image>
+  return <SimpleShell kicker="Menús" title="La propuesta de Kale Txiki." image>
     <div className={styles.menuWrap}>
-      <section className={styles.menuIntro}><div><strong>Consulta la propuesta disponible</strong><p className={styles.meta}>Menú diario, fin de semana y propuestas actualizadas desde el panel interno.</p></div><div className={styles.menuActions}><a className={styles.btn} href={site.phoneHref}>Reservar por teléfono</a><a className={`${styles.btn} ${styles.btnAlt}`} href="/">Volver a la web</a></div></section>
-      {latest.length === 0 ? <div className={styles.emptyMenu}><strong>Menú pendiente de publicar</strong><p>Llámanos para consultar la propuesta del día o reservar mesa.</p></div> : <div className={styles.menuGrid}>{latest.map((menu) => menu ? <article className={styles.menuCard} key={menu.id}><div className={styles.menuCardTop}><div><h2>{menu.title}</h2><p className={styles.meta}>{menu.period_label || formatDate(menu.menu_date) || (menu.menu_type === "daily" ? "Menú diario" : "Fin de semana")}</p></div><span className={styles.badge}>{menu.menu_type === "daily" ? "Diario" : "Fin de semana"}</span></div>{lines(menu.first_courses).length ? <section className={styles.section}><h3>Primeros / propuesta</h3><ul>{lines(menu.first_courses).map((item) => <li key={item}>{item}</li>)}</ul></section> : null}{lines(menu.second_courses).length ? <section className={styles.section}><h3>Segundos</h3><ul>{lines(menu.second_courses).map((item) => <li key={item}>{item}</li>)}</ul></section> : null}{lines(menu.desserts).length ? <section className={styles.section}><h3>Postre</h3><ul>{lines(menu.desserts).map((item) => <li key={item}>{item}</li>)}</ul></section> : null}{menu.price ? <div className={styles.price}>{menu.price}</div> : null}{menu.notes ? <p className={styles.notes}>{menu.notes}</p> : null}</article> : null)}</div>}
-      <section className={styles.contactStrip}><div><strong>Reserva o consulta el menú</strong><p>Para confirmar disponibilidad, precio o alérgenos, lo más rápido es llamarnos.</p></div><div className={styles.menuActions}><a className={styles.btn} href={site.phoneHref}>{site.phone}</a><a className={`${styles.btn} ${styles.btnAlt}`} href={site.mapsUrl}>Cómo llegar</a></div></section>
+      <section className={styles.menuIntro}><div><span className={styles.eyebrow}>Actualizado desde cocina</span><strong>Menú diario y fin de semana</strong><p className={styles.meta}>Consulta la propuesta disponible. Para confirmar disponibilidad, precio o alérgenos, llámanos y te atendemos al momento.</p></div><div className={styles.menuActions}><a className={styles.btn} href={site.phoneHref}>Reservar por teléfono</a><a className={`${styles.btn} ${styles.btnAlt}`} href={site.mapsUrl}>Cómo llegar</a></div></section>
+
+      {latest.length === 0 ? <div className={styles.emptyMenu}><span className={styles.eyebrow}>Menú pendiente</span><strong>Estamos preparando la propuesta.</strong><p>Llámanos para consultar el menú del día o reservar mesa.</p><a className={styles.btn} href={site.phoneHref}>{site.phone}</a></div> : <div className={styles.menuGrid}>{latest.map((menu) => <MenuCard menu={menu} key={menu.id} />)}</div>}
+
+      <section className={styles.notice}><strong>Información importante</strong><p>Los platos pueden variar según disponibilidad. Consulta al equipo si tienes alergias o intolerancias.</p></section>
+
+      <section className={styles.contactStrip}><div><strong>Reserva o consulta el menú</strong><p>Estamos en {site.address}. También puedes llamarnos directamente.</p></div><div className={styles.menuActions}><a className={styles.btn} href={site.phoneHref}>{site.phone}</a><a className={`${styles.btn} ${styles.btnAlt}`} href="/">Volver a la web</a></div></section>
     </div>
   </SimpleShell>;
 }

@@ -1,5 +1,5 @@
 import { site } from "../../lib/site";
-import { getPublishedMenus, lines } from "../../lib/menus";
+import { getPublishedMenus, lines, type PublishedMenu } from "../../lib/menus";
 import SimpleShell from "../simple-shell";
 import styles from "./menu.module.css";
 
@@ -8,12 +8,23 @@ function formatDate(value: string | null) {
   return new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "2-digit", month: "long" }).format(new Date(value));
 }
 
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function pickCurrentMenu(menus: PublishedMenu[], type: PublishedMenu["menu_type"]) {
+  const items = menus.filter((menu) => menu.menu_type === type);
+  const today = todayKey();
+  const upcoming = items
+    .filter((menu) => menu.menu_date && menu.menu_date >= today)
+    .sort((a, b) => String(a.menu_date).localeCompare(String(b.menu_date)));
+
+  return upcoming[0] || items[0];
+}
+
 export default async function MenuDataView() {
   const published = await getPublishedMenus();
-  const latest = [
-    published.find((menu) => menu.menu_type === "daily"),
-    published.find((menu) => menu.menu_type === "weekend"),
-  ].filter(Boolean);
+  const latest = [pickCurrentMenu(published, "daily"), pickCurrentMenu(published, "weekend")].filter(Boolean);
 
   return <SimpleShell kicker="Menús y carta" title="Menús publicados de Kale Txiki." image>
     <div className={styles.menuWrap}>

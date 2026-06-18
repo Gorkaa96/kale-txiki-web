@@ -6,17 +6,22 @@ function cleanDate(value: FormDataEntryValue | null) {
   return text ? text : null;
 }
 
+function titleFromType(value: string) {
+  return value === "weekend" ? "Menú fin de semana" : "Menú diario";
+}
+
 export async function POST(request: NextRequest) {
   const form = await request.formData();
   const code = request.cookies.get("kale_admin_code")?.value || String(form.get("code") || "");
   const id = String(form.get("id") || "");
   const status = String(form.get("status") || "draft");
+  const menuType = String(form.get("menu_type") || "daily");
   const rpcName = id ? "update_menu_with_code" : "insert_menu_with_code";
 
   const payload: Record<string, string | null> = {
     input_code: code,
-    input_menu_type: String(form.get("menu_type") || "daily"),
-    input_title: String(form.get("title") || "Menú"),
+    input_menu_type: menuType,
+    input_title: titleFromType(menuType),
     input_first_courses: String(form.get("first_courses") || ""),
     input_second_courses: String(form.get("second_courses") || ""),
     input_desserts: String(form.get("desserts") || ""),

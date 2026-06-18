@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { kaleSupabase } from "../../../../../lib/kale-supabase";
 
-type DuplicatedMenu = { id?: string } | DuplicatedMenu[];
+function hasId(value: unknown): value is { id: string } {
+  return typeof value === "object" && value !== null && "id" in value && typeof (value as { id?: unknown }).id === "string";
+}
 
-function duplicatedId(data: DuplicatedMenu) {
-  if (Array.isArray(data)) return data[0]?.id || "";
-  return data?.id || "";
+function duplicatedId(data: unknown) {
+  if (Array.isArray(data)) return hasId(data[0]) ? data[0].id : "";
+  return hasId(data) ? data.id : "";
 }
 
 export async function POST(request: NextRequest) {

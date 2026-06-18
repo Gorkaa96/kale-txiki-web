@@ -3,6 +3,14 @@ import { getPublishedMenus, lines, type PublishedMenu } from "../../lib/menus";
 import SimpleShell from "../simple-shell";
 import styles from "./menu.module.css";
 
+const carta = [
+  { title: "Hamburguesas", items: ["Hamburguesas de la casa", "Opciones completas para cena informal", "Consulta disponibilidad y acompañamientos"] },
+  { title: "Pizzas", items: ["Pizzas para compartir", "Perfectas para cenas y grupos", "Pregunta por las variedades disponibles"] },
+  { title: "Raciones", items: ["Raciones para picar", "Platos al centro", "Ideal para compartir en cuadrilla"] },
+  { title: "Pintxos", items: ["Pintxos y barra", "Propuestas de temporada", "Buen plan para vermouth o poteo"] },
+  { title: "Cenas", items: ["Cenas en ambiente de taberna", "Hamburguesas, pizzas y platos para compartir", "Reserva recomendada"] },
+];
+
 function formatDate(value: string | null) {
   if (!value) return null;
   return new Intl.DateTimeFormat("es-ES", {
@@ -44,6 +52,10 @@ function MenuCard({ menu }: { menu: PublishedMenu }) {
   return <article className={styles.menuCard}><div className={styles.menuCardTop}><div><span className={styles.eyebrow}>{typeLabel(menu.menu_type)}</span><h2>{menu.title}</h2><p className={styles.meta}>{date}</p></div></div><div className={styles.divider} /><DishSection title="Primeros / propuesta" items={firstCourses} /><DishSection title="Segundos" items={secondCourses} /><DishSection title="Postres" items={desserts} />{menu.price ? <div className={styles.price}><span>Precio</span><strong>{menu.price}</strong></div> : null}{menu.notes ? <p className={styles.notes}>{menu.notes}</p> : null}</article>;
 }
 
+function CartaFija() {
+  return <section className={styles.cartaBlock}><div className={styles.cartaHead}><span className={styles.eyebrow}>También en Kale Txiki</span><h2>Carta y propuestas habituales</h2><p>Además del menú publicado, puedes consultar en barra o por teléfono las opciones disponibles para picar, cenar o compartir.</p></div><div className={styles.cartaGrid}>{carta.map((group) => <article className={styles.cartaCard} key={group.title}><h3>{group.title}</h3><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></section>;
+}
+
 export default async function MenuDataView() {
   const published = await getPublishedMenus();
   const latest = [pickCurrentMenu(published, "daily"), pickCurrentMenu(published, "weekend")].filter(Boolean) as PublishedMenu[];
@@ -53,6 +65,8 @@ export default async function MenuDataView() {
       <section className={styles.menuIntro}><div><span className={styles.eyebrow}>Actualizado desde cocina</span><strong>Menú diario y fin de semana</strong><p className={styles.meta}>Consulta la propuesta disponible. Para confirmar disponibilidad, precio o alérgenos, llámanos y te atendemos al momento.</p></div><div className={styles.menuActions}><a className={styles.btn} href={site.phoneHref}>Reservar por teléfono</a><a className={`${styles.btn} ${styles.btnAlt}`} href={site.mapsUrl}>Cómo llegar</a></div></section>
 
       {latest.length === 0 ? <div className={styles.emptyMenu}><span className={styles.eyebrow}>Menú pendiente</span><strong>Estamos preparando la propuesta.</strong><p>Llámanos para consultar el menú del día o reservar mesa.</p><a className={styles.btn} href={site.phoneHref}>{site.phone}</a></div> : <div className={styles.menuGrid}>{latest.map((menu) => <MenuCard menu={menu} key={menu.id} />)}</div>}
+
+      <CartaFija />
 
       <section className={styles.notice}><strong>Información importante</strong><p>Los platos pueden variar según disponibilidad. Consulta al equipo si tienes alergias o intolerancias.</p></section>
 

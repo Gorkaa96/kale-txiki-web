@@ -9,6 +9,22 @@ export const dynamic = "force-dynamic";
 
 type Menu = { id: string; menu_type: "daily" | "weekend"; title: string; menu_date: string | null; period_label: string | null; first_courses: string | null; second_courses: string | null; desserts: string | null; notes: string | null; price: string | null; status: string };
 
+async function codeIsValid(code: string) {
+  if (!code) return false;
+  const response = await fetch(`${kaleSupabase.url}/rest/v1/rpc/admin_code_ok`, {
+    method: "POST",
+    headers: {
+      apikey: kaleSupabase.publishableKey,
+      Authorization: `Bearer ${kaleSupabase.publishableKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ input_code: code }),
+    cache: "no-store",
+  });
+  if (!response.ok) return false;
+  return Boolean(await response.json());
+}
+
 async function getMenus(code: string): Promise<Menu[]> {
   if (!code) return [];
   const response = await fetch(`${kaleSupabase.url}/rest/v1/rpc/list_menus_with_code`, {
@@ -31,6 +47,11 @@ export default async function Page({ searchParams }: { searchParams?: { ok?: str
 
   if (!code) {
     return <AdminLogin loginError={searchParams?.login_error === "1"} />;
+  }
+
+  const valid = await codeIsValid(code);
+  if (!valid) {
+    return <AdminLogin loginError />;
   }
 
   const menus = await getMenus(code);

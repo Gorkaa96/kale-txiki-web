@@ -42,6 +42,22 @@ async function getMenus(code: string): Promise<Menu[]> {
   return response.json();
 }
 
+function statusWeight(status: string) {
+  if (status === "published") return 1;
+  if (status === "draft") return 2;
+  return 3;
+}
+
+function sortMenus(menus: Menu[]) {
+  return [...menus].sort((a, b) => {
+    const statusDiff = statusWeight(a.status) - statusWeight(b.status);
+    if (statusDiff !== 0) return statusDiff;
+    const aTime = a.menu_date ? new Date(a.menu_date).getTime() : 0;
+    const bTime = b.menu_date ? new Date(b.menu_date).getTime() : 0;
+    return bTime - aTime;
+  });
+}
+
 export default async function Page({ searchParams }: { searchParams?: Params | Promise<Params> }) {
   const params = await Promise.resolve(searchParams || {});
   const cookieStore = await cookies();
@@ -56,7 +72,7 @@ export default async function Page({ searchParams }: { searchParams?: Params | P
     return <AdminLogin loginError />;
   }
 
-  const menus = await getMenus(code);
+  const menus = sortMenus(await getMenus(code));
   const selectedMenu = params.edit ? menus.find((menu) => menu.id === params.edit) : undefined;
 
   return <main className={styles.page}><div className={styles.wrap}><header className={styles.top}><div className={`${styles.brand} ${styles.brandSmall}`}><img src="/logo.png" alt="Kale Txiki" /><div><div className={styles.kicker}>Kale Txiki Taberna</div><h1 className={styles.title}>Panel de menús</h1><p className={styles.darkText}>Prepara menús por fecha, guárdalos como borrador y publica cuando quieras.</p></div></div><nav className={styles.navLinks}><a className={`${styles.button} ${styles.buttonLight}`} href="/menu">Ver menú público</a><a className={`${styles.button} ${styles.buttonLight}`} href="/">Volver a la web</a></nav></header><section className={styles.grid}><MenuEditor code={code} menu={selectedMenu} ok={params.ok === "1"} error={params.error === "1"} /><MenuList code={code} menus={menus} /></section></div></main>;

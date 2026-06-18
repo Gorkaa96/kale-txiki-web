@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
     body: JSON.stringify(payload),
   });
 
-  const target = response.ok ? "/admin?ok=1" : "/admin?error=1";
+  const ok = status === "published" ? "published" : "saved";
+  const target = response.ok ? `/admin?ok=${ok}` : "/admin?error=1";
   return NextResponse.redirect(new URL(target, request.url), { status: 303 });
 }

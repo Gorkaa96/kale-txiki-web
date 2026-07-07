@@ -38,6 +38,14 @@ function pickCurrentMenu(menus: PublishedMenu[], type: PublishedMenu["menu_type"
   return upcoming[0] || items[0];
 }
 
+async function safePublishedMenus() {
+  try {
+    return await getPublishedMenus();
+  } catch {
+    return [];
+  }
+}
+
 function DishSection({ title, items }: { title: string; items: string[] }) {
   if (!items.length) return null;
   return <section className={styles.section}><h3>{title}</h3><ul>{items.map((item, index) => <li key={`${title}-${index}-${item}`}>{item}</li>)}</ul></section>;
@@ -57,7 +65,7 @@ function CartaFija() {
 }
 
 export default async function MenuDataView() {
-  const published = await getPublishedMenus();
+  const published = await safePublishedMenus();
   const latest = [pickCurrentMenu(published, "daily"), pickCurrentMenu(published, "weekend")].filter(Boolean) as PublishedMenu[];
 
   return <SimpleShell kicker="Menús" title="La propuesta de Kale Txiki." image>
